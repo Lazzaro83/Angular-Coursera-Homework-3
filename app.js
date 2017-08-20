@@ -22,11 +22,16 @@
 		var narrow = this;
 
 		narrow.searchTerm = "";
+
+		narrow.info = "";
 		
 		narrow.search = function(thing){
 			var promise = MenuSearchService.getMatchedMenuItems(thing);
 			promise.then(function (response) {
 		    	narrow.found = response;
+		    	if(narrow.found.length === 0){
+		    		narrow.info = "Nothing found!"
+		    	}
 		 	})
 		  	.catch(function (error) {
 		    	console.log("Something went terribly wrong.");
@@ -46,7 +51,8 @@
 			return $http({
 				method: "GET",
 				url: (ApiBasePath + "/menu_items.json")
-			}).then(function(result){
+				})
+				.then(function(result){
 				var opa = result.data;
 				var foundItems = [];
 				for( var i = 0; i < opa.menu_items.length; i++){
@@ -61,7 +67,7 @@
 					}
 				}
 				return foundItems;
-			})	
+			})			
 		};
 	}
 }())
